@@ -8,14 +8,15 @@ const Header = (props) => {
     const {title, bookmark} = props
 
     const CheckNotifi = () =>{
-        try {
-            PushNotification.localNotification({    
-            title: "My Notification Title", // (optional)
-            message: "Hehe Working", // (required)
-            })
-        } catch (error) {
-        console.log(error) 
-        }
+        // try {
+        //     console.log("hhhghgh")
+        //     PushNotification.localNotification({    
+        //     title: "My Notification Title", // (optional)
+        //     message: "Hehe Working", // (required)
+        //     })
+        // } catch (error) {
+        // console.log(error) 
+        // }
         
         //console.log("Hhe hehe Working")
     }

@@ -110,6 +110,112 @@ const Home = ({navigation}) => {
       }
     })
   }
+
+  const postBookmark = async(postid) => {
+    const token = await getData('token')
+    fetch(BaseURL+'bookmark',{
+      method:'post',
+      headers: {
+        'Authorization':'Bearer ' +token,
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({
+        news_id:postid
+      })
+    }).then((res)=>res.json())
+    .then((data)=>{
+      if(data.status){
+        const settet1 =  storeData(postid)
+        console.log(settet1)
+      }else{
+        Alert.alert("Some connection problem")
+      }
+    })
+  }
+
+  const storeData = async (value) => {
+    const bookids = []
+    const isdata = await getData('bookmark_id')
+    if(isdata == undefined){
+      try {
+        bookids.push(value)
+        const bookids1 = JSON.stringify(bookids)
+        await AsyncStorage.setItem('bookmark_id', bookids1)
+      } catch (e) {
+        console.log(e)
+      }
+    }else{
+      var n = isdata.includes(value)
+      if(!n){
+        var xyz = JSON.parse(isdata);
+        xyz.push(value)
+        console.log(xyz)
+        var isdata1 = JSON.stringify(xyz)
+        try {
+          await AsyncStorage.setItem('bookmark_id', isdata1)
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    }
+    console.log(isdata1, " ", bookids)
+    // 
+    return true
+  }
+
+  const postUnBookmark = async(postid) =>{
+    const token = await getData('token')
+    fetch(BaseURL+'unBookmark',{
+      method:'post',
+      headers: {
+        'Authorization':'Bearer ' +token,
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({
+        news_id:postid
+      })
+    }).then((res)=>res.json())
+    .then(async(data)=>{
+      if(data.status){
+        const settet1 = await removeData(postid)
+        console.log("jahskalsj",settet1)
+      }else{
+        Alert.alert("Some connection problem")
+      }
+    })
+  }
+
+  const removeData = async (value) => {
+    const isdata = await getData('bookmark_id')
+    const bookids1 = JSON.parse(isdata)
+    console.log(bookids1,"Checkinr")
+    if(bookids1.length == 1){
+      try {
+        await AsyncStorage.removeItem('bookmark_id')
+      } catch (e) {
+        console.log(e)
+      }
+    }else{
+      var n = bookids1.indexOf(value);
+      console.log("n", n)
+  
+        if (xyz > -1) {
+          bookids1.splice(n, 1);
+        }
+        var xyz = JSON.stringify(bookids1);
+        
+        try {
+          await AsyncStorage.setItem('bookmark_id', xyz)
+        } catch (e) {
+          console.log(e)
+        }
+    
+    }
+    console.log(bookids1, " ", value, "bookdata and value")
+    // 
+    return true
+  }
+
     return (
         <View style={{flex:1, backgroundColor:'#B1C5C5'}}>
             <View style={{flex:1}}>
@@ -119,10 +225,18 @@ const Home = ({navigation}) => {
                   {newsData.length >0 ?<DeckSwiper
                     onSwipeRight={()=>GetMoredata()}
                     onSwipeLeft={()=>GetMoredata()}
-                    looping={true}
+                    looping={false}
+                    
                     dataSource={newsData}
                     renderItem={item =>
-                        <NewsCard data={item} postDislike={()=>postDislike(item.id)} postLike={()=>postLike(item.id)} />
+                        
+                        <NewsCard 
+                          data={item} 
+                          postDislike={()=>postDislike(item.id)} 
+                          postLike={()=>postLike(item.id)} 
+                          postBookmark={()=>postBookmark(item.id)}
+                          postUnBookmark={()=>postUnBookmark(item.id)}
+                        />
                     }
                   />:<View></View>} 
                 </View>
