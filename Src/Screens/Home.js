@@ -197,7 +197,7 @@ const Home = ({navigation}) => {
       }
     }else{
       var n = bookids1.indexOf(value);
-      console.log("n", n)
+      //console.log("n", n)
   
         if (xyz > -1) {
           bookids1.splice(n, 1);
