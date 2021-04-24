@@ -32,6 +32,7 @@ const Home = ({navigation}) => {
     const fetchRandomNews = async() =>{
       setloader(true)
       const token = await getData('token')
+      console.log("Token", token)
        fetch(BaseURL+`getRandomNews/${page}`, {
         method: 'GET',
         headers: {
@@ -41,15 +42,8 @@ const Home = ({navigation}) => {
       }).then((res)=>res.json())
       .then((data)=>{
         if(data.status){
-          if(newsData.length == 0){
-            setnewsData(data.data)
-            setindex(0)
-          }
-          else{
-            setnewsData(data.data)
-            setindex(0)
-          }
-          
+          setnewsData(data.data)
+          setindex(0)          
          // console.log("My Data", data.data)
         }else{
           Alert.alert("Something went wrong", data.msg)
@@ -63,7 +57,7 @@ const Home = ({navigation}) => {
 
   const GetMoredata = () => {
     if(index == newsData.length-1){
-      // console.log(newsData)
+      //console.log("Data",newsData)
       setpage(page+1)
     }
     setindex(index+1)
@@ -126,7 +120,7 @@ const Home = ({navigation}) => {
     .then((data)=>{
       if(data.status){
         const settet1 =  storeData(postid)
-        console.log(settet1)
+        //console.log(settet1)
       }else{
         Alert.alert("Some connection problem")
       }
@@ -226,10 +220,8 @@ const Home = ({navigation}) => {
                     onSwipeRight={()=>GetMoredata()}
                     onSwipeLeft={()=>GetMoredata()}
                     looping={false}
-                    
                     dataSource={newsData}
-                    renderItem={item =>
-                        
+                    renderItem={item =>    
                         <NewsCard 
                           data={item} 
                           postDislike={()=>postDislike(item.id)} 
@@ -238,7 +230,7 @@ const Home = ({navigation}) => {
                           postUnBookmark={()=>postUnBookmark(item.id)}
                         />
                     }
-                  />:<View></View>} 
+                  />:<View><Text>Helo</Text></View>} 
                 </View>
             </View>
             <BottomNav active="home" 
